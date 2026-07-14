@@ -1,0 +1,27 @@
+name: Copy Repo Files
+on:
+  workflow_dispatch:
+
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout blank-canvas
+        uses: actions/checkout@v4
+
+      - name: Copy files from source repository
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Clone your original project into a temporary folder
+          git clone https://github.com/sojiyashokm-sudo/anivibefinder.git temp-source
+          
+          # Copy all files except the git history
+          rsync -av --exclude='.git' temp-source/ ./
+          rm -rf temp-source
+          
+          # Commit and push back to blank-canvas
+          git add -A
+          git commit -m "Automated import of anivibefinder files" || echo "No changes to commit"
+          git push origin main
