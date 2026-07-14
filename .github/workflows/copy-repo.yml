@@ -2,6 +2,9 @@ name: Copy Repo Files
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   copy:
     runs-on: ubuntu-latest
